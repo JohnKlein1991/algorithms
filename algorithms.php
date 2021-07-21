@@ -140,3 +140,51 @@ function dijkstra(array $graph, $start, $finish): ?array
 
     return $result;
 }
+
+/**
+ * Dynamic programming: Longest Common Substring
+ * @param string $str1
+ * @param string $str2
+ * @return string
+ */
+function dp_longest_common_substring(string $str1, string $str2)
+{
+    $matrix = [];
+    $maxLength = 0;
+    $maxi = null;
+    $maxj = null;
+    $result = '';
+
+    for ($i = 0; $i < strlen($str1); $i++) {
+        for ($j = 0; $j < strlen($str2); $j++) {
+            if ($str1[$i] === $str2[$j]) {
+                if ($i === 0 || $j === 0) {
+                    $localLength = 1;
+                } else {
+                    $localLength = $matrix[$i - 1][$j - 1] + 1;
+                }
+                $matrix[$i][$j] = $localLength;
+                if ($localLength > $maxLength) {
+                    $maxLength = $localLength;
+                    $maxi = $i;
+                    $maxj = $j;
+                }
+            } else {
+                $matrix[$i][$j] = 0;
+            }
+        }
+    }
+
+    if ($maxLength === 0) {
+        return '';
+    }
+
+    while (isset($matrix[$maxi][$maxj]) && $matrix[$maxi][$maxj] !== 0) {
+        $result = $str1[$maxi] . $result;
+
+        $maxi = --$maxi;
+        $maxj = --$maxj;
+    }
+
+    return $result;
+}
