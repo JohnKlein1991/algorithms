@@ -188,3 +188,47 @@ function dp_longest_common_substring(string $str1, string $str2)
 
     return $result;
 }
+
+/**
+ * Dynamic programming: Levenshtein distance
+ * @param string $str1
+ * @param string $str2
+ * @return int
+ */
+function dp_levenshtein_distance(string $str1, string $str2)
+{
+    $arr1 = str_split($str1);
+    $arr2 = str_split($str2);
+    $length1 = count($arr1);
+    $length2 = count($arr2);
+
+    if ($length1 === 0) {
+        return $length2;
+    } elseif ($length2 === 0) {
+        return $length1;
+    }
+
+    $matrix = [];
+    for ($i = -1; $i < $length1; $i++) {
+        $matrix[$i][-1] = $i + 1;
+    }
+    for ($j = -1; $j < $length2; $j++) {
+        $matrix[-1][$j] = $j + 1;
+    }
+
+    $fn = function (string $c1, string $c2) {
+        return $c1 === $c2 ? 0 : 1;
+    };
+
+    for ($i = 0; $i < $length1; $i++) {
+        for ($j = 0; $j < $length2; $j++) {
+            $matrix[$i][$j] = min(
+                ($matrix[$i][$j - 1] ?? 0) + 1,
+                ($matrix[$i - 1][$j] ?? 0) + 1,
+                $matrix[$i - 1][$j - 1] + $fn($arr1[$i], $arr2[$j])
+            );
+        }
+    }
+
+    return $matrix[$length1 - 1][$length2 - 1];
+}
