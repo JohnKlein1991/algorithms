@@ -190,7 +190,7 @@ function dp_longest_common_substring(string $str1, string $str2)
 }
 
 /**
- * Dynamic programming: Levenshtein distance
+ * Dynamic programming: Levenshtein distance, Wagner–Fischer algorithm
  * @param string $str1
  * @param string $str2
  * @return int
